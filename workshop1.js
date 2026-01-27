@@ -17,3 +17,4 @@ while (numOdd <=10) {
 console.log(sumEven)
 console.log(ProductOdd)
 
+   

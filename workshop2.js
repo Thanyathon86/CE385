@@ -12,6 +12,6 @@ function BmiCal(weight,height) {
         console.log('คุณทีค่า BMI :', BMI.toFixed(2),'Category อ้วนมาก');
     
 };
-BmiCal(60,175);
+BmiCal(80,175);
 
 
