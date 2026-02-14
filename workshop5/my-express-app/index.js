@@ -3,18 +3,24 @@ const app = express();
 
 app.use(express.json()); 
 
-
 let students = [
     { id: 1, name: "Thanyathon", age: 21 },
     { id: 2, name: "kitsanapong", age: 22 },
     { id: 3, name: "Thaddao", age: 99 }
 ];
 
+// --- 1. สร้าง Middleware ไว้ด้านบน ---
+const validateStudent = (req, res, next) => {
+    const { name, age } = req.body;
+    if (!name || !age) {
+        return res.status(400).send("Invalid data");
+    }
+    next();
+};
 
 app.get('/api/students', (req, res) => {
     res.send(students);
 });
-
 
 app.get('/api/students/:id', (req, res) => {
     const id = parseInt(req.params.id);
@@ -26,8 +32,8 @@ app.get('/api/students/:id', (req, res) => {
     }
 });
 
-
-app.post('/api/students', (req, res) => {
+// --- 2. ใช้ app.post แค่ตัวเดียวที่มี Middleware ---
+app.post('/api/students', validateStudent, (req, res) => {
     const newStudent = {
         id: req.body.id || students.length + 1,
         name: req.body.name,
@@ -36,7 +42,6 @@ app.post('/api/students', (req, res) => {
     students.push(newStudent);
     res.status(201).send(newStudent);
 });
-
 
 app.put('/api/students/:id', (req, res) => {
     const id = parseInt(req.params.id);
@@ -49,7 +54,6 @@ app.put('/api/students/:id', (req, res) => {
         res.status(404).send("Error 404: Student Not Found for update!");
     }
 });
-
 
 app.delete('/api/students/:id', (req, res) => {
     const id = parseInt(req.params.id);
